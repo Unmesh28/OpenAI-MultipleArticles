@@ -13,19 +13,21 @@ def hello_world():
 openai.api_key = settings.OPENAI_API_KEY
 
 def getArticle(prompt_suffix):
-    prompt = settings.PROMPT_PREFIX + prompt_suffix
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=prompt,
-        temperature=0.9,
-        max_tokens=1000,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0.5
-    )
-    return response.choices[0]["text"]
+    try :
+        prompt = settings.PROMPT_PREFIX + prompt_suffix
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            temperature=0.9,
+            max_tokens=1000,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0.5
+        )
+        return response.choices[0]["text"]
 
-    
+    except :
+        return("Error From OPENAI API") 
 
 @app.route('/getArtciles', methods=['GET'])
 def getArtciles():
@@ -37,17 +39,6 @@ def getArtciles():
         print(text)
         articles[prompt] = text
     return(articles)
-
-
-response = openai.Completion.create(
-  engine="text-davinci-002",
-  prompt="write a real estate article about Viseu District",
-  temperature=0.9,
-  max_tokens=1000,
-  top_p=1,
-  frequency_penalty=0,
-  presence_penalty=0.5
-)
 
 # main driver function
 if __name__ == '__main__':
